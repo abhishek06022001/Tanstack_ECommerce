@@ -1,4 +1,4 @@
-import { LogOut, History, UserPen, Plus, UsersRound, PackageSearch, Settings, LogIn } from "lucide-react"
+import { Calendar, Home, Inbox, LogIn, LogOut, PackageSearch, Plus, Search, Settings, UserPen, UsersRound } from "lucide-react"
 
 import {
     Sidebar,
@@ -7,19 +7,14 @@ import {
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
-    SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { Link, useNavigate } from "react-router-dom"
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks"
-import { logoutUser } from "@/features/userSlice"
-import { persistor } from "@/store/store"
-import localStorage from "redux-persist/es/storage"
+import { userInfo } from "os"
 
 // Menu items.
-
 const isLoggedOut = [
     {
         title: "Products",
@@ -77,27 +72,32 @@ const isLoggedInAdmin = [
 const footerItems = [
     {
         title: "Logout",
-
         icon: LogOut,
         color: 'red'
     },
 ]
-
 export function AppSidebar() {
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-    const { id, role } = useAppSelector(state => state.users_store_reducer);
+    let user_info = localStorage.getItem('user');
+    let role = null;
+    let id = null;
+    if (user_info) {
+        user_info = JSON.parse(user_info);
+        role = user_info?.role;
+        id = user_info?.id;
+    }
+
     function logout() {
         localStorage.removeItem('accessToken');
-        dispatch(logoutUser());
+        localStorage.removeItem('user');
+        localStorage.removeItem('user_role');
         navigate('/');
     }
     return (
-        <Sidebar
-            className="border-none "
-        >
-            <SidebarContent className="bg-orange-100 py-10" >
+        <Sidebar>
+            <SidebarContent className="bg-primary-foreground"  >
                 <SidebarGroup>
+                    {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {id ?
@@ -105,12 +105,10 @@ export function AppSidebar() {
                                     {role ? <>
                                         {isLoggedInAdmin.map((isLoggedInAdmin) => (
                                             <SidebarMenuItem key={isLoggedInAdmin.title}>
-                                                <SidebarMenuButton asChild className="hover:bg-orange-300 hover:text-orange-800 text-xl active:bg-orange-500
-                                                active:text-black
-                                                " >
+                                                <SidebarMenuButton asChild >
                                                     <Link to={isLoggedInAdmin.url}>
-                                                        <isLoggedInAdmin.icon />
-                                                        <span>{isLoggedInAdmin.title}</span>
+                                                        
+                                                        <span className="text-primary" >{isLoggedInAdmin.title}</span>
                                                     </Link>
                                                 </SidebarMenuButton>
                                             </SidebarMenuItem>
@@ -120,13 +118,10 @@ export function AppSidebar() {
                                         <>
                                             {isLoggedInUser.map((isLoggedInUser) => (
                                                 <SidebarMenuItem key={isLoggedInUser.title}>
-                                                    <SidebarMenuButton asChild className="hover:bg-orange-300 hover:text-orange-800 text-xl
-                                                     active:bg-orange-500
-                                                active:text-black
-                                                    " >
+                                                    <SidebarMenuButton asChild >
                                                         <Link to={isLoggedInUser.url}>
-                                                            <isLoggedInUser.icon />
-                                                            <span>{isLoggedInUser.title}</span>
+                                                          
+                                                            <span className="text-primary">{isLoggedInUser.title}</span>
                                                         </Link>
                                                     </SidebarMenuButton>
                                                 </SidebarMenuItem>
@@ -139,13 +134,11 @@ export function AppSidebar() {
                                 <>
                                     {isLoggedOut.map((item) => (
                                         <SidebarMenuItem key={item.title}>
-                                            <SidebarMenuButton asChild className="hover:bg-orange-300 hover:text-orange-800 text-xl
-                                             active:bg-orange-500
-                                                active:text-black
-                                            " >
+                                            <SidebarMenuButton asChild 
+                                            >
                                                 <Link to={item.url}>
-                                                    <item.icon />
-                                                    <span>{item.title}</span>
+                                               
+                                                    <span className="text-primary">{item.title}</span>
                                                 </Link>
                                             </SidebarMenuButton>
                                         </SidebarMenuItem>
@@ -157,20 +150,20 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter>
-                <SidebarGroupContent>
+            <SidebarFooter  >
+                <SidebarGroupContent >
                     <SidebarMenu>
-
                         {id && footerItems.map((item) => (
                             <SidebarMenuItem key={item.title} className="p-0" >
                                 <SidebarMenuButton asChild
                                     onClick={logout}
-                                    className="hover:bg-black hover:text-white" >
+                                   
+                                    >
                                     <a >
                                         <item.icon
                                             color={item?.color}
                                         />
-                                        <span>{item.title}</span>
+                                        <span className="text-primary">{item.title}</span>
                                     </a>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
@@ -179,6 +172,6 @@ export function AppSidebar() {
                 </SidebarGroupContent>
 
             </SidebarFooter>
-        </Sidebar >
+        </Sidebar>
     )
 }

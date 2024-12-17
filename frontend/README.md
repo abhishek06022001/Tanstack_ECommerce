@@ -48,3 +48,7 @@ export default tseslint.config({
   },
 })
 ```
+<!-- my rules  -->
+primary mostly for text 
+secondary mostly for background or other styling 
+MY COLORS ARE :  from-zinc-400  via-blue-500 to-pink-300

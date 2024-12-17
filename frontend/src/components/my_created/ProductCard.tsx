@@ -1,3 +1,6 @@
+import * as React from "react"
+
+import { Button } from "@/components/ui/button"
 import {
     Card,
     CardContent,
@@ -6,56 +9,52 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Product } from "@/types"
-import { Button } from "./ui/button"
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { useAppSelector } from "@/hooks/hooks"
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { ProductCardProps, ProductCardtype } from "@/types"
 import { Link } from "react-router-dom"
-import axios from "axios"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog"
+export function ProductCard({ product }: ProductCardProps) {
+    const { id, name, price, description ,image} = product;
+    
+    const role  = localStorage.getItem('user_role');
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-function ProductCard({ id, description, name, price, image }: Product) {
-    const { role } = useAppSelector(state => state.users_store_reducer);
     return (
         <div>
-            <ToastContainer />
-            <Card className="bg-orange-300 rounded-none h-96  flex-1 w-96" >
+            {/* <ToastContainer /> */}
+            <Card className="bg-primary-foreground text-primary rounded-none   flex-1 w-80" >
                 <CardHeader>
                     <CardTitle
                     >
                         <p
                             className="bg-white rounded-sm p-4 flex justify-center
-                            hover:shadow-amber-600 hover:shadow-lg
+                            hover:shadow-pink-500 hover:shadow-lg
                             "
                         > <img
-                                className={`md:h-40 h-24`}
+                                className={`md:h-32 h-24`}
                                 src={"http://localhost:8080/" + image} alt="" /></p>
                     </CardTitle>
 
                 </CardHeader>
                 <CardContent
-                    className=" h-3 overflow-hidden text-ellipsis my-1 text-lg font-semibold"
+                    className=" h-3 overflow-hidden text-ellipsis my-1  text-md font-semibold"
                 >
                     {name}
                 </CardContent>
                 <CardContent
-                    className=" h-9 overflow-hidden text-ellipsis my-1 "
+                    className=" h-7 overflow-hidden text-ellipsis my-1 "
                 >
                     {description}
                 </CardContent>
                 <CardFooter className=" block" >
-                    <p className="text-xl font-bold text-orange-900" >
+                    <p className="" >
 
                         The Price is  : {price}
                     </p>
@@ -76,10 +75,10 @@ function ProductCard({ id, description, name, price, image }: Product) {
                                         <AlertDialogTrigger><Button
                                             className=" rounded-none"
                                         >Delete Product</Button></AlertDialogTrigger>
-                                        <AlertDialogContent className="bg-orange-100 sm:rounded-none " >
+                                        <AlertDialogContent className=" sm:rounded-none " >
                                             <AlertDialogHeader>
                                                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                                <AlertDialogDescription className="text-orange-800" >
+                                                <AlertDialogDescription className="" >
                                                     This action cannot be undone. This will permanently delete your product
                                                     and remove it from our servers.
                                                 </AlertDialogDescription>
@@ -106,12 +105,6 @@ function ProductCard({ id, description, name, price, image }: Product) {
                 </CardFooter>
 
             </Card>
-            {/* alert dialog for delete  */}
-
-
-
         </div>
     )
 }
-
-export default ProductCard

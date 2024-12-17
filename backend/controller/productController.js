@@ -76,7 +76,8 @@ const productController = {
       let category_query =
         category == "none" ? `` : `AND products.category = '${category}'`;
       const products = await db.sequelize.query(
-        `SELECT * FROM products where is_deleted = 0  ${category_query}  ${mini_query} LIMIT ${limit} offset ${skip} `
+        `SELECT * FROM products where is_deleted = 0 LIMIT 10`
+        // `SELECT * FROM products where is_deleted = 0  ${category_query}  ${mini_query} LIMIT ${limit} offset ${skip} `
       );
       const total_products = await db.sequelize.query(
         `SELECT * FROM products where is_deleted = 0  ${category_query}  ${mini_query} `

@@ -1,7 +1,13 @@
-import Navbar from "@/components/Navbar"
-import { AppSidebar } from "@/components/ui/AppSidebar"
-import { SidebarProvider } from "@/components/ui/sidebar"
+import React from 'react'
+
+
 import { Outlet } from "react-router-dom"
+
+import { SidebarProvider } from '../components/ui/sidebar'
+import Navbar from '../components/my_created/Navbar'
+import { AppSidebar } from '@/components/my_created/AppSideBar'
+
+
 type Props = {}
 function LandingPage({ }: Props) {
     return (
@@ -13,7 +19,6 @@ function LandingPage({ }: Props) {
                     <div className="flex-1">
                         <Outlet />
                     </div>
-                  
                 </div>
             </SidebarProvider>
         </div>

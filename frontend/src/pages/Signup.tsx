@@ -1,88 +1,108 @@
-import { Alert, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import useIsValid from "@/hooks/useIsValid";
-import axios, { AxiosError } from "axios";
-import { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom"
-import { BounceLoader } from "react-spinners";
+import React, { useEffect } from 'react'
+"use client"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
-type Props = {
-   
-}
+
+import { Button } from '../components/ui/button'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../components/ui/form'
+import { Input } from '../components/ui/input'
+import { Link, useNavigate } from 'react-router-dom'
+import axios, { AxiosError } from 'axios'
+import { toast } from '../hooks/use-toast'
+
+const formSchema = z.object({
+    name: z.string().min(1, { message: "required field" }),
+    email: z.string().email({ message: "please enter a valid Email" }),
+    password: z.string().min(3, { message: "Too Short, atleast enter 4 characters " }),
+}).required();
+type Props = {}
 function Signup({ }: Props) {
-    const [valid] = useIsValid();
-    const [statusCode, setStatusCode] = useState<number | null>(null);
-    const [input, setInput] = useState<Props>({ name: '', email: '', password: '' });
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: "",
+            email: "", password: ""
+        },
+    })
     const navigate = useNavigate();
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        setInput({ ...input, [e.currentTarget.name]: e.currentTarget.value });
-    }
-    async function signup(e: React.MouseEvent<HTMLInputElement>) {
-        e.preventDefault();
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            const response = await axios.post("/api/register", input);
-            // setLoading(true);
-            setStatusCode(200);
+
+            const response = await axios.post("/api/register", values);
+            toast({
+                className: "bg-green-300 border-none  fixed top-4 right-3 w-fit  pr-5  text-black text-2xl",
+                title: "User registered successfully  "
+            });
             setTimeout(() => {
                 navigate('/login');
-            }, 200);
+            }, 2000)
         } catch (error: unknown) {
-            if (error instanceof AxiosError) {
-                if (error.status == 400) {
-                    setStatusCode(409);
-                    setTimeout(() => {
-                        setStatusCode(null);
-                    }, 1000);
-                } else {
-                    setStatusCode(500);
-                    setTimeout(() => {
-                        setStatusCode(null);
-                    }, 1000)
-                    alert("server issue please try again later");
-                }
-            }
+            alert("Please retry , user already exists ...");
         }
-
     }
+
+
     return (
-        <div className="h-screen flex justify-center items-center">
-            {(statusCode == 200) &&
-                <div className="absolute top-10 right-2" >
-                    <Alert className="bg-green-500/45 w-72" >
-                        <AlertTitle> SuccessFul Sign up! </AlertTitle>
-                    </Alert>
-                </div>
-            }
-            {(statusCode == 409) &&
-                <div className="absolute top-10 right-2" >
-                    <Alert className="bg-red-500/50 w-72" >
-                        <AlertTitle> User already Exists ... </AlertTitle>
-                    </Alert>
-                </div>
-            }
-            {(statusCode == 500) &&
-                <div className="absolute top-10 right-2" >
-                    <Alert className="bg-orange-500/50 w-72" >
-                        <AlertTitle> Some server Error please try again ...  </AlertTitle>
-                    </Alert>
-                </div>
-            }
-            {valid.loading ? <><BounceLoader color="orange" /></> : <>
-                {valid.valid ?
-                    <Navigate to="/" />
-                    : <><div className="w-96 h-96 rounded-lg 
-            border-r-4 border-l-4 border-orange-500  text-center p-10 flex flex-col justify-between" >
-                        <h1 className="text-3xl font-mono font-extrabold " >Signup Page</h1>
-                        <Input type="name" placeholder="Name" name="name" className="bg-orange-100" onChange={(e) => handleChange(e)} />
-                        <Input type="email" placeholder="Email" name="email" className="bg-orange-100" onChange={(e) => handleChange(e)} />
-                        <Input type="password" placeholder="Password" name="password" className="bg-orange-100" onChange={(e) => handleChange(e)} />
-                        <Button onClick={e => signup(e)} >Sign up</Button>
-                        <Link to={'/login'}>
-                            <Button className="w-full" ><span className="text-xs font-light">already have an account ?</span> Log in</Button>
-                        </Link>
-                    </div></>}
-            </>}
+        <div className='flex h-screen justify-center items-center bg-gradient-to-r from-black  to-pink-300'  >
+            <div className="w-96 p-5 rounded-sm">
+                <div className='text-center text-3xl font-bold m-10' >REGISTER </div>
+                <Form {...form}  >
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className='' >Full Name</FormLabel>
+                                    <FormControl>
+                                        <Input className='bg-zinc-200 text-black'  {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className='' >Email</FormLabel>
+                                    <FormControl>
+                                        <Input className='bg-zinc-200 text-black'     {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <FormControl>
+                                        <Input className='bg-zinc-200 text-black'  {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <div className='flex flex-col gap-5 items-center' >
+
+                            <Link to={'/login'} className='text-black text-sm hover:text-muted-foreground' >
+
+                                Already have an account ? click here to  Login In
+
+                            </Link>
+                            <Button type="submit">Submit</Button>
+                        </div>
+
+                    </form>
+                </Form>
+            </div>
+
         </div>
     )
 }
