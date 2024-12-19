@@ -1,4 +1,6 @@
+import { CreateProduct } from '@/components/my_created/CreateProduct';
 import { ProductCard } from '@/components/my_created/ProductCard';
+import { Button } from '@/components/ui/button';
 import { ProductCardtype } from '@/types';
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
@@ -24,14 +26,18 @@ function ProductPage({ }: Props) {
   if (isError) {
     return <div>Error found...</div>
   }
-  console.log("Rerendered the page...");
-  console.log("The fetched data is ,", data?.data.msg);
   const product_array = data?.data.msg || null;
   return (
-    <div className='p-10 flex flex-wrap gap-10' >
-      {product_array && product_array.map((product: ProductCardtype) => {
-        return <ProductCard key={product.id} product={product} />
-      })}
+    <div className='p-5  '>
+    
+        <div className='my-5' ><CreateProduct /></div>
+        <div className=' flex flex-wrap gap-10' >
+
+          {product_array && product_array.map((product: ProductCardtype) => {
+            return <ProductCard key={product.id} product={product} />
+          })}
+        </div>
+   
     </div>
   )
 }

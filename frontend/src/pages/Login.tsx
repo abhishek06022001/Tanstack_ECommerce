@@ -47,8 +47,8 @@ function Login({ }: Props) {
             localStorage.setItem('user_role', JSON.stringify(user_info.data.role));
 
             toast({
-                className: "bg-gray-300 border-none  fixed top-4 right-3 w-fit  pr-5  text-black text-2xl",
-                title: "Logged in successfully . . . "
+                className: "bg-gray-300 border-none  fixed top-4 right-3 w-96  pr-5  text-black text-2xl",
+                title: "Logged in successfully "
             });
             setTimeout(() => {
                 navigate('/');
@@ -64,10 +64,10 @@ function Login({ }: Props) {
         }
     }
     return (
-        <div className='flex h-screen justify-center items-center bg-primary'  >
+        <div className='flex h-screen justify-center items-center text-primary bg-primary-foreground'  >
             <div className="w-96 p-5 rounded-sm">
                 <Toaster />
-                <div className='text-center text-3xl font-bold m-10 text-pink-50' >LOGIN PAGE </div>
+                <div className='text-center text-3xl font-bold m-10 ' >LOGIN PAGE </div>
                 <Form {...form}  >
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <FormField
@@ -75,9 +75,9 @@ function Login({ }: Props) {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className=' text-pink-200' >Username</FormLabel>
+                                    <FormLabel className=' ' >Username</FormLabel>
                                     <FormControl>
-                                        <Input className='bg-zinc-800 border-none text-white'  {...field} />
+                                        <Input className='bg-primary text-primary-foreground'  {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -88,9 +88,9 @@ function Login({ }: Props) {
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className='text-pink-200'>Password</FormLabel>
+                                    <FormLabel className=''>Password</FormLabel>
                                     <FormControl>
-                                        <Input className='bg-zinc-800 text-white border-none'  {...field} />
+                                        <Input className='bg-primary text-primary-foreground'  {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -98,12 +98,12 @@ function Login({ }: Props) {
                         />
                         <div className='flex flex-col gap-5 items-center' >
 
-                            <Link to={'/signup'} className='text-zinc-600 text-sm hover:text-muted-foreground ' >
+                            <Link to={'/signup'} className='text-sm hover:text-muted-foreground ' >
 
                                 New Here ? Sign up
 
                             </Link>
-                            <Button className='bg-black rounded-none hover:bg-white hover:text-black ' type="submit">Submit</Button>
+                            <Button className=' ' type="submit">Submit</Button>
                         </div>
 
                     </form>

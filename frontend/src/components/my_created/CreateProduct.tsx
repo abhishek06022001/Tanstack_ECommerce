@@ -1,9 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
-import { useEffect, useMemo, useRef } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { Button } from '../ui/button';
-"use client"
+import { Button } from "@/components/ui/button"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { number, z } from "zod"
@@ -17,8 +21,17 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useRef, useState } from "react"
+import { Textarea } from "../ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import axios from "axios"
+import { error } from "console"
+import { useToast } from "@/hooks/use-toast"
+import { Toaster } from "../ui/toaster"
+const MAX_FILE_SIZE = 5000000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 const formSchema = z.object({
     name: z.string().min(2).max(100),
     description: z
@@ -28,72 +41,65 @@ const formSchema = z.object({
         }),
     price: z.coerce.number().min(1, { message: "The price value must be greater than 0" }),
     category: z.string(),
+    // if refine accepts true then no message will be shown below 
     file: z.any()
 })
-type Props = {}
-
-function IndividualProduct({ }: Props) {
+export function CreateProduct() {
     const queryClient = useQueryClient();
     const fileInput = useRef<HTMLInputElement>(null);
-    const { id } = useParams();
-    const ac_token = localStorage.getItem('accessToken');
-    const updateProduct = async (product: any) => {
-        return axios.put(`/api/update_product/${id}`, product, {
-            headers: {
-                token: ac_token
-            }
-        });
-    }
-    const navigate = useNavigate();
-    const role = localStorage.getItem('user_role');
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
             description: ' ',
             price: 0,
-            category: ""
+            category: "",
         },
     })
+    const { toast } = useToast();
+    const [product_info, setProduct_info] = useState(null);
+    const ac_token = localStorage.getItem('accessToken');
+    const createProduct = async (product: any) => {
+        return axios.post(`/api/create_product/`, product, {
+            headers: {
+                token: ac_token
+            }
+        });
+    }
     const { mutate } = useMutation({
-        mutationFn: updateProduct,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['products', id] });
+        mutationFn: createProduct,
+        onSuccess: (data) => {
+            setProduct_info(data.data.product?.image);
+
             queryClient.invalidateQueries({ queryKey: ['products'] });
-        }
-    });
-    // const ac_token = localStorage.getItem('accessToken');
-    const { data, isLoading, isError } = useQuery({
-        queryKey: ['products', id],
-        queryFn: () => {
-            return axios.get(`/api/get_product/${id}`, {
-                headers: {
-                    token: ac_token
-                }
+            setTimeout(() => {
+               
+                clearForm();
+              
+            }, 2000);
+           
+            toast({
+                className: "bg-gray-300 border-none  fixed w-96  bottom-5 pr-5  text-black text-2xl",
+                title: "Product created successfully "
+            });
+           
+        },
+        onError:(error)=>{
+
+            toast({
+                className: "bg-gray-300 border-none   fixed w-96  pr-5  text-black text-2xl",
+                title: "Please retry with correct inputs  "
             });
         }
-    })
-    // CALLING OF ALL HOOKS MUST BE SAME ACROSS ALL THE CYCLES AND NOT CONDITIONAL DUDE 
-    useEffect(() => {
-        if (data?.data.msg) {
-            // console.log("Use effect called", data?.data.msg.category);
-            form.reset({
-                name: data?.data.msg.name,
-                description: data?.data.msg.description,
-                price: data?.data.msg.price,
-                category: data?.data.msg.category,
-            })
+    });
+    function clearForm() {
+        if (fileInput.current) {
+            fileInput.current.value = '';
         }
-    }, [data]);
-    if (isLoading) {
-        return <div>loading . . . </div>
+        setProduct_info(null);
+        form.reset();
     }
-    if (isError) {
-        return <div>Error Found...</div>
-    }
-
     function onSubmit(values: z.infer<typeof formSchema>) {
-        // console.log(values)
         if (fileInput?.current?.files && fileInput?.current?.files.length > 0) {
             values.file = fileInput?.current?.files[0];
         }
@@ -105,21 +111,20 @@ function IndividualProduct({ }: Props) {
         formData.append('file', values.file);
         mutate(formData);
     }
-    const product_info = data?.data.msg;
-    const moveBack = () => {
-        navigate(-1);
-    }
     return (
-        <div className='flex justify-center items-center h-full' >
-            <div>
-                {/* <div> <Button className='m-5' onClick={moveBack}>Back</Button></div> */}
-                <div className='flex gap-3' >
-                    {product_info.image &&
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button className="rounded-none">create new product</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[825px]">
+                <Toaster />
+                <div className="p-2">
+                    {product_info &&
                         <div
-                            className="bg-white rounded-sm p-4 flex justify-center " >
-                            <img className={`md:h-96 h-24`} src={"http://localhost:8080/" + product_info.image} alt="" />
-                        </div>}
-
+                            className="bg-white rounded-sm p-4  flex justify-center " >
+                            <img className={`md:h-24 h-24`} src={"http://localhost:8080/" + product_info} alt="" />
+                        </div>
+                    }
                     <div>
                         <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -130,7 +135,6 @@ function IndividualProduct({ }: Props) {
                                         <FormItem>
                                             <FormControl>
                                                 <Input className=""  {...field}
-                                                    /// <reference path="fileInput" />
                                                     type="file"
                                                     accept="image/*, application/pdf"
                                                     ref={fileInput}
@@ -221,12 +225,12 @@ function IndividualProduct({ }: Props) {
                                     )}
                                 />
                                 <Button type="submit">Submit</Button>
+                                <Button type="button" className="mx-5" onClick={clearForm} >Clear</Button>
                             </form>
                         </Form>
                     </div>
                 </div>
-            </div>
-        </div>
+            </DialogContent>
+        </Dialog>
     )
 }
-export default IndividualProduct

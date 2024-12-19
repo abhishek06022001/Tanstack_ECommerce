@@ -21,11 +21,30 @@ import { Label } from "@/components/ui/label"
 import { ProductCardProps, ProductCardtype } from "@/types"
 import { Link } from "react-router-dom"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog"
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
+import axios from "axios"
 export function ProductCard({ product }: ProductCardProps) {
-    const { id, name, price, description ,image} = product;
-    
-    const role  = localStorage.getItem('user_role');
-
+    const { id, name, price, description, image } = product;
+    const ac_token = localStorage.getItem('accessToken');
+    const role = localStorage.getItem('user_role');
+    const queryClient = useQueryClient();
+    const deleteProductApi = () => {
+        return axios.delete(`/api/delete_product/${id}`, {
+            headers: {
+                token: ac_token
+            }
+        });
+    }
+    const { mutate } = useMutation({
+        mutationFn: deleteProductApi,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['products', id] });
+            queryClient.invalidateQueries({ queryKey: ['products'] });
+        }
+    });
+    function delete_product() {
+        mutate();
+    }
     return (
         <div>
             {/* <ToastContainer /> */}
@@ -34,9 +53,7 @@ export function ProductCard({ product }: ProductCardProps) {
                     <CardTitle
                     >
                         <p
-                            className="bg-white rounded-sm p-4 flex justify-center
-                            hover:shadow-pink-500 hover:shadow-lg
-                            "
+                            className="bg-white rounded-sm p-4 flex justify-center"
                         > <img
                                 className={`md:h-32 h-24`}
                                 src={"http://localhost:8080/" + image} alt="" /></p>
@@ -74,6 +91,7 @@ export function ProductCard({ product }: ProductCardProps) {
                                     <AlertDialog >
                                         <AlertDialogTrigger><Button
                                             className=" rounded-none"
+                                            
                                         >Delete Product</Button></AlertDialogTrigger>
                                         <AlertDialogContent className=" sm:rounded-none " >
                                             <AlertDialogHeader>
@@ -85,7 +103,9 @@ export function ProductCard({ product }: ProductCardProps) {
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
                                                 <AlertDialogCancel className="sm:rounded-none">Cancel</AlertDialogCancel>
-                                                <AlertDialogAction className="sm:rounded-none">Continue</AlertDialogAction>
+                                                <AlertDialogAction className="sm:rounded-none"
+                                                    onClick={delete_product}
+                                                >Continue</AlertDialogAction>
                                             </AlertDialogFooter>
                                         </AlertDialogContent>
                                     </AlertDialog>
