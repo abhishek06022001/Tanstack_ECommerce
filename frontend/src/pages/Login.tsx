@@ -77,7 +77,7 @@ function Login({ }: Props) {
                                 <FormItem>
                                     <FormLabel className=' ' >Username</FormLabel>
                                     <FormControl>
-                                        <Input className='bg-primary text-primary-foreground'  {...field} />
+                                        <Input className='bg-secondary text-secondary-foreground'  {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -90,7 +90,7 @@ function Login({ }: Props) {
                                 <FormItem>
                                     <FormLabel className=''>Password</FormLabel>
                                     <FormControl>
-                                        <Input className='bg-primary text-primary-foreground'  {...field} />
+                                        <Input className='bg-secondary text-secondary-foreground'  {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

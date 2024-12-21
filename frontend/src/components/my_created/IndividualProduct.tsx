@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '../ui/button';
 "use client"
@@ -19,6 +19,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { useToast } from '@/hooks/use-toast';
+import { Toaster } from '../ui/toaster';
 const formSchema = z.object({
     name: z.string().min(2).max(100),
     description: z
@@ -31,12 +33,12 @@ const formSchema = z.object({
     file: z.any()
 })
 type Props = {}
-
 function IndividualProduct({ }: Props) {
     const queryClient = useQueryClient();
     const fileInput = useRef<HTMLInputElement>(null);
     const { id } = useParams();
     const ac_token = localStorage.getItem('accessToken');
+    const { toast } = useToast();
     const updateProduct = async (product: any) => {
         return axios.put(`/api/update_product/${id}`, product, {
             headers: {
@@ -58,8 +60,18 @@ function IndividualProduct({ }: Props) {
     const { mutate } = useMutation({
         mutationFn: updateProduct,
         onSuccess: () => {
+            toast({
+                className: "bg-gray-300 border-none  fixed w-96 pr-5 top-10 right-5  text-black text-2xl",
+                title: "Product edited successfully "
+            });
             queryClient.invalidateQueries({ queryKey: ['products', id] });
             queryClient.invalidateQueries({ queryKey: ['products'] });
+        },
+        onError: () => {
+            toast({
+                className: "bg-gray-300 border-none   fixed w-96 top-10 right-5 pr-5  text-black text-2xl",
+                title: "Please retry with correct inputs  "
+            });
         }
     });
     // const ac_token = localStorage.getItem('accessToken');
@@ -91,7 +103,6 @@ function IndividualProduct({ }: Props) {
     if (isError) {
         return <div>Error Found...</div>
     }
-
     function onSubmit(values: z.infer<typeof formSchema>) {
         // console.log(values)
         if (fileInput?.current?.files && fileInput?.current?.files.length > 0) {
@@ -111,7 +122,9 @@ function IndividualProduct({ }: Props) {
     }
     return (
         <div className='flex justify-center items-center h-full' >
+            <Toaster />
             <div>
+           
                 {/* <div> <Button className='m-5' onClick={moveBack}>Back</Button></div> */}
                 <div className='flex gap-3' >
                     {product_info.image &&
@@ -221,6 +234,9 @@ function IndividualProduct({ }: Props) {
                                     )}
                                 />
                                 <Button type="submit">Submit</Button>
+                                <Button type="button" className='mx-3'
+                                    onClick={moveBack}
+                                >Back</Button>
                             </form>
                         </Form>
                     </div>

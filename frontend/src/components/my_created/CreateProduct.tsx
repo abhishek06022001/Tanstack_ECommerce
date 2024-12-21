@@ -2,15 +2,11 @@ import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { number, z } from "zod"
+import { z } from "zod"
 import {
     Form,
     FormControl,
@@ -21,17 +17,13 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRef, useState } from "react"
 import { Textarea } from "../ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import axios from "axios"
-import { error } from "console"
 import { useToast } from "@/hooks/use-toast"
 import { Toaster } from "../ui/toaster"
-const MAX_FILE_SIZE = 5000000;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 const formSchema = z.object({
     name: z.string().min(2).max(100),
     description: z
@@ -70,22 +62,16 @@ export function CreateProduct() {
         mutationFn: createProduct,
         onSuccess: (data) => {
             setProduct_info(data.data.product?.image);
-
             queryClient.invalidateQueries({ queryKey: ['products'] });
             setTimeout(() => {
-               
                 clearForm();
-              
             }, 2000);
-           
             toast({
                 className: "bg-gray-300 border-none  fixed w-96  bottom-5 pr-5  text-black text-2xl",
                 title: "Product created successfully "
             });
-           
         },
-        onError:(error)=>{
-
+        onError: (error) => {
             toast({
                 className: "bg-gray-300 border-none   fixed w-96  pr-5  text-black text-2xl",
                 title: "Please retry with correct inputs  "
@@ -217,7 +203,7 @@ export function CreateProduct() {
                                                     </SelectContent>
                                                 </Select>
                                             </FormControl>
-                                            <FormDescription>
+                                            <FormDescription>x
                                                 This is your product category.
                                             </FormDescription>
                                             <FormMessage />

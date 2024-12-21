@@ -9,3 +9,6 @@ export type ProductCardtype = {
     image?: string,
     price: number
 }
+export interface ProductParams {
+    page: number, category: string, searchQuery: string
+}
