@@ -1,5 +1,4 @@
 import { Calendar, Home, Inbox, LogIn, LogOut, PackageSearch, Plus, Search, Settings, UserPen, UsersRound } from "lucide-react"
-
 import {
     Sidebar,
     SidebarContent,
@@ -13,7 +12,6 @@ import {
 } from "@/components/ui/sidebar"
 import { Link, useNavigate } from "react-router-dom"
 import { userInfo } from "os"
-
 // Menu items.
 const isLoggedOut = [
     {
@@ -49,7 +47,6 @@ const isLoggedInUser = [
         url: "order_history",
         icon: History,
     },
-
 ]
 const isLoggedInAdmin = [
     {
@@ -67,7 +64,6 @@ const isLoggedInAdmin = [
         url: "users",
         icon: UsersRound,
     },
-
 ]
 const footerItems = [
     {
@@ -82,11 +78,10 @@ export function AppSidebar() {
     let role = null;
     let id = null;
     if (user_info) {
-        user_info = JSON.parse(user_info);
-        role = user_info?.role;
-        id = user_info?.id;
+        const obj_user_info = JSON.parse(user_info);
+        role = obj_user_info?.role;
+        id = obj_user_info?.id;
     }
-
     function logout() {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('user');
@@ -107,26 +102,23 @@ export function AppSidebar() {
                                             <SidebarMenuItem key={isLoggedInAdmin.title}>
                                                 <SidebarMenuButton asChild >
                                                     <Link to={isLoggedInAdmin.url}>
-                                                        
+
                                                         <span className="text-primary" >{isLoggedInAdmin.title}</span>
                                                     </Link>
                                                 </SidebarMenuButton>
                                             </SidebarMenuItem>
                                         ))}
-
                                     </> :
                                         <>
                                             {isLoggedInUser.map((isLoggedInUser) => (
                                                 <SidebarMenuItem key={isLoggedInUser.title}>
                                                     <SidebarMenuButton asChild >
                                                         <Link to={isLoggedInUser.url}>
-                                                          
                                                             <span className="text-primary">{isLoggedInUser.title}</span>
                                                         </Link>
                                                     </SidebarMenuButton>
                                                 </SidebarMenuItem>
                                             ))}
-
                                         </>
                                     }
                                 </>
@@ -134,16 +126,15 @@ export function AppSidebar() {
                                 <>
                                     {isLoggedOut.map((item) => (
                                         <SidebarMenuItem key={item.title}>
-                                            <SidebarMenuButton asChild 
+                                            <SidebarMenuButton asChild
                                             >
                                                 <Link to={item.url}>
-                                               
+
                                                     <span className="text-primary">{item.title}</span>
                                                 </Link>
                                             </SidebarMenuButton>
                                         </SidebarMenuItem>
                                     ))}
-
                                 </>}
 
                         </SidebarMenu>
@@ -157,8 +148,7 @@ export function AppSidebar() {
                             <SidebarMenuItem key={item.title} className="p-0" >
                                 <SidebarMenuButton asChild
                                     onClick={logout}
-                                   
-                                    >
+                                >
                                     <a >
                                         <item.icon
                                             color={item?.color}
@@ -170,7 +160,6 @@ export function AppSidebar() {
                         ))}
                     </SidebarMenu>
                 </SidebarGroupContent>
-
             </SidebarFooter>
         </Sidebar>
     )

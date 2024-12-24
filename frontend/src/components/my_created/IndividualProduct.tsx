@@ -83,7 +83,7 @@ function IndividualProduct({ }: Props) {
                     token: ac_token
                 }
             });
-        }
+        },
     })
     // CALLING OF ALL HOOKS MUST BE SAME ACROSS ALL THE CYCLES AND NOT CONDITIONAL DUDE 
     useEffect(() => {
@@ -101,7 +101,7 @@ function IndividualProduct({ }: Props) {
         return <div>loading . . . </div>
     }
     if (isError) {
-        return <div>Error Found...</div>
+        navigate('/login');
     }
     function onSubmit(values: z.infer<typeof formSchema>) {
         // console.log(values)
@@ -124,7 +124,7 @@ function IndividualProduct({ }: Props) {
         <div className='flex justify-center items-center h-full' >
             <Toaster />
             <div>
-           
+
                 {/* <div> <Button className='m-5' onClick={moveBack}>Back</Button></div> */}
                 <div className='flex gap-3' >
                     {product_info.image &&

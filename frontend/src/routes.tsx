@@ -5,8 +5,9 @@ import ErrorPage from "./Pages/ErrorPage";
 import LandingPage from "./Pages/LandingPage";
 import ProductPage from "./Pages/ProductPage";
 import IndividualProduct from "./components/my_created/IndividualProduct";
-
-
+import ProfilePage from "./Pages/ProfilePage";
+import PrivateRoutes from './routes/PrivateRoutes'
+import ProtectedRoutes from './routes/ProtectedRoutes'
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -18,7 +19,11 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/edit_product/:id',
-                element: <IndividualProduct />
+                element: <ProtectedRoutes><IndividualProduct /></ProtectedRoutes>
+            },
+            {
+                path: '/profile',
+                element: <PrivateRoutes><ProfilePage /></PrivateRoutes>
             },
         ]
     },
@@ -30,6 +35,7 @@ export const router = createBrowserRouter([
         path: '/signup',
         element: <Signup />
     },
+
     {
         path: '*',
         element: <ErrorPage />

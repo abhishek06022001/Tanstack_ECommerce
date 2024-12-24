@@ -7,6 +7,7 @@ const auth = async (req, res, next) => {
     const token = req.headers.token;
     if (token) {
       const { id } = jwt.verify(token, "JWT_SECRET_KEY");
+      // console.log("The id is",id);
       if (req.id && req.id !== id) {
         return res.status(400).json({ login: false, msg: "Invalid Token" });
       }
