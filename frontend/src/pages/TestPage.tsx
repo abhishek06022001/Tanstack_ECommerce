@@ -1,11 +1,12 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-
+import { cn } from "@/lib/utils"
 import { toast } from "@/components/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -29,12 +30,10 @@ const FormSchema = z.object({
         required_error: "A date of birth is required.",
     }),
 })
-
-export function DatePickerForm() {
+export function CalendarForm() {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
     })
-
     function onSubmit(data: z.infer<typeof FormSchema>) {
         toast({
             title: "You submitted the following values:",
@@ -45,7 +44,6 @@ export function DatePickerForm() {
             ),
         })
     }
-
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

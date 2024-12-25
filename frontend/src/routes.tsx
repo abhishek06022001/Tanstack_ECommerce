@@ -8,6 +8,7 @@ import IndividualProduct from "./components/my_created/IndividualProduct";
 import ProfilePage from "./Pages/ProfilePage";
 import PrivateRoutes from './routes/PrivateRoutes'
 import ProtectedRoutes from './routes/ProtectedRoutes'
+import Users from "./Pages/Users";
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
             {
                 path: '/edit_product/:id',
                 element: <ProtectedRoutes><IndividualProduct /></ProtectedRoutes>
+            },
+            {
+                path: '/users',
+                element: <ProtectedRoutes><Users /></ProtectedRoutes>
             },
             {
                 path: '/profile',

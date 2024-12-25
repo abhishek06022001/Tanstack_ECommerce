@@ -77,7 +77,7 @@ export function ProductCard({ product }: ProductCardProps) {
                     </p>
                     <div className="flex gap-1">
                         {
-                            role ?
+                            (role === "1") ?
                                 <div className="flex gap-1">
 
                                     <Link to={`/edit_product/${id}`}>
@@ -91,7 +91,7 @@ export function ProductCard({ product }: ProductCardProps) {
                                     <AlertDialog >
                                         <AlertDialogTrigger><Button
                                             className=" rounded-none"
-                                            
+
                                         >Delete Product</Button></AlertDialogTrigger>
                                         <AlertDialogContent className=" sm:rounded-none " >
                                             <AlertDialogHeader>

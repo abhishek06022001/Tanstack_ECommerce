@@ -139,7 +139,7 @@
     --sidebar-ring: 217.2 91.2% 59.8%}
 }
 * {
-  transition: background-color 0.3s ease, color 0.1s ease;
+  transition: background-color 0.2s ease;
 }
 @layer base {
   * {

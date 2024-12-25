@@ -32,6 +32,16 @@ function Login({ }: Props) {
         },
     })
     const navigate = useNavigate();
+    const ac_token = localStorage.getItem('accessToken');
+
+    useEffect(() => {
+        if (ac_token) {
+            setTimeout(() => {
+                navigate('/');
+            }, 2000)
+        }
+    }, [ac_token]);
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             const ac_token = await axios.post('/api/login', values);
@@ -45,22 +55,19 @@ function Login({ }: Props) {
             user_info.data = { ...user_info.data[0], id: id };
             localStorage.setItem('user', JSON.stringify(user_info.data));
             localStorage.setItem('user_role', JSON.stringify(user_info.data.role));
-
+          
             toast({
-                className: "bg-gray-300 border-none  fixed top-4 right-3 w-96  pr-5  text-black text-2xl",
-                title: "Logged in successfully "
+                className: "text-secondary bg-primary border-none  fixed top-4 right-3 w-96  pr-5   text-2xl",
+                title: "Logged in successfully ",
+                duration: 1500
             });
-            setTimeout(() => {
-                navigate('/');
-            }, 2000)
-
         } catch (error) {
             toast({
-                className: "bg-red-400 border-none  fixed top-4 right-3 w-fit   text-black text-2xl",
-                title: "Please Retry with correct details . . ."
+                className: "text-secondary bg-primary border-none  fixed top-4 right-3 w-fit  text-2xl",
+                title: "Please Retry with correct details . . .",
+                duration: 1500
             });
             console.log(error);
-
         }
     }
     return (

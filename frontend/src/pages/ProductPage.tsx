@@ -11,6 +11,7 @@ import { SelectCategory } from '@/components/my_created/SelectCategory';
 type Props = {}
 function ProductPage({ }: Props) {
   const ac_token = localStorage.getItem('accessToken');
+  const role = localStorage.getItem('user_role');
   const [productParam, setProductParam] = useState<ProductParams>({
     page: 1, searchQuery: '', category: 'none'
   })
@@ -43,7 +44,7 @@ function ProductPage({ }: Props) {
     <div className='p-5  min-h-[1000px] flex flex-col justify-between '>
       <div>
         <div className='my-5 flex gap-5 ' >
-          <CreateProduct />
+          {(role == '1') && <CreateProduct />}
           <Input
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setProductParam({ ...productParam, searchQuery: e.target.value, page: 1 })}
             className='w-96' placeholder="Search products" />

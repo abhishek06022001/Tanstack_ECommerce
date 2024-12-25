@@ -68,13 +68,15 @@ export function CreateProduct() {
             }, 2000);
             toast({
                 className: "bg-gray-300 border-none  fixed w-96  bottom-5 pr-5  text-black text-2xl",
-                title: "Product created successfully "
+                title: "Product created successfully ",
+                duration: 1000
             });
         },
         onError: (error) => {
             toast({
                 className: "bg-gray-300 border-none   fixed w-96  pr-5  text-black text-2xl",
-                title: "Please retry with correct inputs  "
+                title: "Please retry with correct inputs  ",
+                duration: 1000
             });
         }
     });

@@ -21,6 +21,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Toaster } from '../ui/toaster';
+// formSchema here 
 const formSchema = z.object({
     name: z.string().min(2).max(100),
     description: z
@@ -33,6 +34,7 @@ const formSchema = z.object({
     file: z.any()
 })
 type Props = {}
+// individual product here 
 function IndividualProduct({ }: Props) {
     const queryClient = useQueryClient();
     const fileInput = useRef<HTMLInputElement>(null);
@@ -62,7 +64,8 @@ function IndividualProduct({ }: Props) {
         onSuccess: () => {
             toast({
                 className: "bg-gray-300 border-none  fixed w-96 pr-5 top-10 right-5  text-black text-2xl",
-                title: "Product edited successfully "
+                title: "Product edited successfully ",
+                duration: 1000
             });
             queryClient.invalidateQueries({ queryKey: ['products', id] });
             queryClient.invalidateQueries({ queryKey: ['products'] });
@@ -70,11 +73,11 @@ function IndividualProduct({ }: Props) {
         onError: () => {
             toast({
                 className: "bg-gray-300 border-none   fixed w-96 top-10 right-5 pr-5  text-black text-2xl",
-                title: "Please retry with correct inputs  "
+                title: "Please retry with correct inputs  ",
+                duration: 1000
             });
         }
     });
-    // const ac_token = localStorage.getItem('accessToken');
     const { data, isLoading, isError } = useQuery({
         queryKey: ['products', id],
         queryFn: () => {
@@ -101,10 +104,13 @@ function IndividualProduct({ }: Props) {
         return <div>loading . . . </div>
     }
     if (isError) {
+        queryClient.invalidateQueries({ queryKey: ['products'] });
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('user');
+        localStorage.removeItem('user_role');
         navigate('/login');
     }
     function onSubmit(values: z.infer<typeof formSchema>) {
-        // console.log(values)
         if (fileInput?.current?.files && fileInput?.current?.files.length > 0) {
             values.file = fileInput?.current?.files[0];
         }
@@ -237,6 +243,7 @@ function IndividualProduct({ }: Props) {
                                 <Button type="button" className='mx-3'
                                     onClick={moveBack}
                                 >Back</Button>
+
                             </form>
                         </Form>
                     </div>

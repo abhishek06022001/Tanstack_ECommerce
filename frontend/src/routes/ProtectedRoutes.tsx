@@ -11,9 +11,8 @@ function ProtectedRoutes({ children }: Props) {
         <div>
             {(ac_token && (role === 1)) ?
                 (<>{children}</>)
-                : <Navigate to={'/login'} />}
+                : <Navigate to={'/'} />}
         </div>
     )
 }
-
 export default ProtectedRoutes

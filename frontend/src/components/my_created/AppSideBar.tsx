@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Link, useNavigate } from "react-router-dom"
 import { userInfo } from "os"
+import { useQueryClient } from "@tanstack/react-query"
 // Menu items.
 const isLoggedOut = [
     {
@@ -74,6 +75,7 @@ const footerItems = [
 ]
 export function AppSidebar() {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     let user_info = localStorage.getItem('user');
     let role = null;
     let id = null;
@@ -83,6 +85,7 @@ export function AppSidebar() {
         id = obj_user_info?.id;
     }
     function logout() {
+        queryClient.invalidateQueries({ queryKey: ['products'] });
         localStorage.removeItem('accessToken');
         localStorage.removeItem('user');
         localStorage.removeItem('user_role');
@@ -92,7 +95,6 @@ export function AppSidebar() {
         <Sidebar>
             <SidebarContent className="bg-primary-foreground"  >
                 <SidebarGroup>
-                    {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {id ?
@@ -102,7 +104,6 @@ export function AppSidebar() {
                                             <SidebarMenuItem key={isLoggedInAdmin.title}>
                                                 <SidebarMenuButton asChild >
                                                     <Link to={isLoggedInAdmin.url}>
-
                                                         <span className="text-primary" >{isLoggedInAdmin.title}</span>
                                                     </Link>
                                                 </SidebarMenuButton>

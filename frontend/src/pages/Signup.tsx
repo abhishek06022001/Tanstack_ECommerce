@@ -24,20 +24,29 @@ function Signup({ }: Props) {
         },
     })
     const navigate = useNavigate();
+    const ac_token = localStorage.getItem('accessToken');
+    if (ac_token) {
+        navigate('/');
+    }
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             const response = await axios.post("/api/register", values);
             toast({
                 className: "bg-gray-300 border-none  fixed top-4 right-3 w-96  pr-5  text-black text-2xl",
-                title: "Registered  successfully "
+                title: "Registered  successfully ",
+                duration: 1000
             });
             setTimeout(() => {
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('user');
+                localStorage.removeItem('user_role');
                 navigate('/login');
             }, 2000)
-        } catch (error: unknown) {  
+        } catch (error: unknown) {
             toast({
                 className: "bg-gray-300 border-none  fixed top-4 right-3 w-96  pr-5  text-black text-2xl",
-                title: "Please retry  with correct details ... "
+                title: "Please retry  with correct details ... ",
+                duration: 1000
             });
         }
     }
