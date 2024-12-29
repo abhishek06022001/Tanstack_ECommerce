@@ -19,4 +19,5 @@ router.get("/get_user/:id", auth, users.get_user_byId);
 router.get("/get_users", auth, authorization, users.get_users);
 router.get("/test", auth, users.test);
 router.delete("/delete_user/:id", auth, authorization, users.delete_user);
+router.get("/users", auth, authorization, users.get_all_users);
 module.exports = router;

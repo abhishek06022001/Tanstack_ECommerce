@@ -27,3 +27,7 @@ export interface UserProp {
     email: string | null,
     image: string | null
 }
+
+export type UsersType = {
+    name: string, role: number, email: string
+}
