@@ -9,6 +9,10 @@ export type ProductCardtype = {
     image?: string,
     price: number
 }
+export type Item_Type = {
+    product: number,
+    quantity: number
+}
 export interface ProductParams {
     page: number, category: string, searchQuery: string
 }
@@ -29,5 +33,16 @@ export interface UserProp {
 }
 
 export type UsersType = {
-    name: string, role: number, email: string
+    name: string, role: number, email: string, id: number
+}
+export type OrderType = {
+    createdAt: Date
+    id: number
+    order_id: number
+    product_id: number
+    product_name: string
+    product_price_at_order: number
+    quantity: number
+    updatedAt: Date
+    user_id: number
 }

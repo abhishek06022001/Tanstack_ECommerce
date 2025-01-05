@@ -17,6 +17,12 @@ import {
 } from '@tanstack/react-table'
 import { UsersType } from '@/types';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@radix-ui/react-dialog';
+import { DialogHeader } from '@/components/ui/dialog';
+import EditUser from '@/components/my_created/EditUser';
+import { CreateProduct } from '@/components/my_created/CreateProduct';
+import CreateUser from '@/components/my_created/CreateUser';
+import DeleteUser from '@/components/my_created/DeleteUser';
 type Props = {}
 function Users({ }: Props) {
   const queryClient = useQueryClient();
@@ -31,6 +37,14 @@ function Users({ }: Props) {
       });
     },
   });
+  function OpenEditModal(a: number) {
+
+  }
+  function OpenModalDelete(b: number) {
+
+
+
+  }
   //Okay have set all the data for the users _data here now can use tanstack Table
   const [users_data, setData] = useState([]);
   const rerender = React.useReducer(() => ({}), {})[1];
@@ -54,11 +68,14 @@ function Users({ }: Props) {
       },
       {
         header: 'ACTIONS',
-        cell: info =>
-          <div className='flex justify-center gap-10' >
-            <Button className='w-28'>Edit</Button>
-            <Button className='w-28'>Delete</Button>
-          </div>
+        cell: info => {
+          return <div className='flex justify-center gap-7' >
+       
+            <EditUser  id={info.row.original.id} />
+           
+            <DeleteUser id={info.row.original.id} />
+          </div >
+        }
       }
     ],
     []
@@ -79,7 +96,8 @@ function Users({ }: Props) {
 
 
       <div className='px-4'>
-        <Button>Create A new User</Button>
+        {/* <Button>Create A new User</Button> */}
+        <CreateUser />
       </div>
       <div className='h-full flex flex-col justify-center items-center' >
 
@@ -157,14 +175,18 @@ function MyTable({
       <tbody>
         {table.getRowModel().rows.map(row => (
           <tr key={row.id} className="border-t border-secondary hover:bg-secondary-light">
-            {row.getVisibleCells().map(cell => (
+            {row.getVisibleCells().map(cell =>
+
+            (
               <td
                 className="bg-secondary rounded-lg px-1 py-2 text-center  hover:bg-primary-foreground"
                 key={cell.id}
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
-            ))}
+            )
+
+            )}
           </tr>
         ))}
       </tbody>

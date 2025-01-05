@@ -9,6 +9,8 @@ import ProfilePage from "./Pages/ProfilePage";
 import PrivateRoutes from './routes/PrivateRoutes'
 import ProtectedRoutes from './routes/ProtectedRoutes'
 import Users from "./Pages/Users";
+import OrderHistory from "./Pages/OrderHistory";
+import ViewProduct from "./Pages/ViewProduct";
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -17,6 +19,10 @@ export const router = createBrowserRouter([
             {
                 index: true,
                 element: <ProductPage />
+            },
+            {
+                path: '/product/:id',
+                element: <PrivateRoutes> <ViewProduct /></PrivateRoutes>
             },
             {
                 path: '/edit_product/:id',
@@ -30,6 +36,10 @@ export const router = createBrowserRouter([
                 path: '/profile',
                 element: <PrivateRoutes><ProfilePage /></PrivateRoutes>
             },
+            {
+                path:'/order_history',
+                element: <PrivateRoutes><OrderHistory /></PrivateRoutes>
+            }
         ]
     },
     {

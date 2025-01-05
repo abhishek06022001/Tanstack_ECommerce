@@ -13,6 +13,8 @@ import {
 import { Link, useNavigate } from "react-router-dom"
 import { userInfo } from "os"
 import { useQueryClient } from "@tanstack/react-query"
+import { useContext } from "react"
+import { CartContext } from "@/main"
 // Menu items.
 const isLoggedOut = [
     {
@@ -79,6 +81,7 @@ export function AppSidebar() {
     let user_info = localStorage.getItem('user');
     let role = null;
     let id = null;
+    const { clearCart } = useContext(CartContext);
     if (user_info) {
         const obj_user_info = JSON.parse(user_info);
         role = obj_user_info?.role;
@@ -89,6 +92,8 @@ export function AppSidebar() {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('user');
         localStorage.removeItem('user_role');
+        localStorage.removeItem('cart');
+        clearCart();
         navigate('/');
     }
     return (

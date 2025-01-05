@@ -10,6 +10,7 @@ import { AppSidebar } from '@/components/my_created/AppSideBar'
 
 type Props = {}
 function LandingPage({ }: Props) {
+    
     return (
         <div>
             <SidebarProvider>
