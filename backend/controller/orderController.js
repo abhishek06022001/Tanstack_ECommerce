@@ -37,10 +37,8 @@ const orderController = {
           quantity: element.quantity,
           order_id: random_order_id,
         };
-
         return order;
       });
-
       await Order.bulkCreate(promises);
       return res.status(200).json({ success: true, msg: "order submitted" });
     } catch (error) {

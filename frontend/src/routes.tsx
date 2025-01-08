@@ -11,6 +11,7 @@ import ProtectedRoutes from './routes/ProtectedRoutes'
 import Users from "./Pages/Users";
 import OrderHistory from "./Pages/OrderHistory";
 import ViewProduct from "./Pages/ViewProduct";
+import Cart from "./Pages/Cart";
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
             {
                 path: '/users',
                 element: <ProtectedRoutes><Users /></ProtectedRoutes>
+            },
+            {
+                path: '/cart',
+                element: <PrivateRoutes><Cart /></PrivateRoutes>
             },
             {
                 path: '/profile',

@@ -40,7 +40,7 @@ function ViewProduct({}: Props) {
         navigate(-1);
     }
     const { addToCart, removeFromCart, cart } = useContext(CartContext);
-    const item = cart.find(prod => prod.product == product_info.id);
+    const item = cart.find(prod => prod.product.id == product_info.id);
 
   return (
     <div className="flex flex-col justify-center items-center p-10 "> 
@@ -55,11 +55,11 @@ function ViewProduct({}: Props) {
           <div className="flex gap-5 bg-secondary text-secondary-foreground p-5 m-10 " >
 
             <Button
-                  onClick={() => addToCart(product_info.id)} 
+                  onClick={() => addToCart(product_info)} 
               >+</Button> {item?.quantity || 0} 
               
             <Button
-            onClick={()=>removeFromCart(product_info.id)}
+            onClick={()=>removeFromCart(product_info)}
             >-</Button>
           </div>
 

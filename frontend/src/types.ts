@@ -10,7 +10,7 @@ export type ProductCardtype = {
     price: number
 }
 export type Item_Type = {
-    product: number,
+    product: ProductCardtype,
     quantity: number
 }
 export interface ProductParams {
