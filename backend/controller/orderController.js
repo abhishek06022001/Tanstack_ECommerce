@@ -19,6 +19,8 @@ const orderController = {
   submitOrder: async (req, res) => {
     try {
       const user_ka_id = parseInt(req.params.id);
+      console.log("the id is", user_ka_id);
+      
       let random_order_id = 1;
       const orderss = await db.sequelize.query(
         `select * from orders where user_id =${user_ka_id} order by order_id DESC limit 1 `
@@ -30,15 +32,15 @@ const orderController = {
 
       const promises = order_array.map((element) => {
         let order = {
-          product_id: element.id,
-          product_price_at_order: element.price,
-          product_name: element.name,
+          product_id: element.product.id,
+          product_price_at_order: element.product.price,
+          product_name: element.product.name,
           user_id: user_ka_id,
           quantity: element.quantity,
           order_id: random_order_id,
         };
         return order;
-      });
+      });   
       await Order.bulkCreate(promises);
       return res.status(200).json({ success: true, msg: "order submitted" });
     } catch (error) {

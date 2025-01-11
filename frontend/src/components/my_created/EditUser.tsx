@@ -180,7 +180,7 @@ function EditUser({ id }: Props) {
                                     <FormItem>
                                         <FormLabel>Email</FormLabel>
                                         <FormControl>
-                                            <Input  {...field} />
+                                            <Input  disabled {...field} />
                                         </FormControl>
                                         <FormDescription>
                                         </FormDescription>

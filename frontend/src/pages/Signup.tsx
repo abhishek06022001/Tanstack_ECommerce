@@ -9,6 +9,7 @@ import { Input } from '../components/ui/input'
 import { Link, useNavigate } from 'react-router-dom'
 import axios, { AxiosError } from 'axios'
 import { toast } from '../hooks/use-toast'
+import { Toaster } from '@/components/ui/toaster'
 const formSchema = z.object({
     name: z.string().min(1, { message: "required field" }),
     email: z.string().email({ message: "please enter a valid Email" }),
@@ -25,34 +26,44 @@ function Signup({ }: Props) {
     })
     const navigate = useNavigate();
     const ac_token = localStorage.getItem('accessToken');
-    if (ac_token) {
-        navigate('/');
-    }
+   useEffect(()=>{
+       if (ac_token) {
+           navigate('/');
+       }
+   },[])
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             const response = await axios.post("/api/register", values);
+
+
             toast({
-                className: "bg-gray-300 border-none  fixed top-4 right-3 w-96  pr-5  text-black text-2xl",
-                title: "Registered  successfully ",
-                duration: 1000
+                className: "bg-green-300 border-none fixed top-4 right-3 w-96 pr-5 text-black text-2xl",
+                title: "Registered successfully",
+                duration: 2000,
             });
+
             setTimeout(() => {
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('user');
                 localStorage.removeItem('user_role');
                 navigate('/login');
-            }, 2000)
-        } catch (error: unknown) {
+            }, 2000); 
+            console.log("not here");
+            
+        } catch (error) {
+            console.error("Registration Error:", error);
             toast({
-                className: "bg-gray-300 border-none  fixed top-4 right-3 w-96  pr-5  text-black text-2xl",
-                title: "Please retry  with correct details ... ",
-                duration: 1000
+                className: "text-secondary bg-red-500   border-none fixed top-4 right-3 w-fit min-w-96 text-2xl",
+                title: "User Already Exists ... ",
+                duration: 1500,
             });
         }
     }
+
     return (
         <div className='flex h-screen justify-center items-center text-primary bg-primary-foreground'  >
             <div className="w-96 p-5 rounded-sm">
+                  <Toaster />
                 <div className='text-center text-3xl font-bold m-10' >REGISTER </div>
                 <Form {...form}  >
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

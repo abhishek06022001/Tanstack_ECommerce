@@ -1,5 +1,5 @@
 import { CartContext } from '@/main';
-import React, { useContext } from 'react'
+import  { useContext } from 'react'
 import {
     Table,
     TableBody,
@@ -10,29 +10,13 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { add } from 'date-fns';
+
 
 type Props = {}
 
 function Cart({ }: Props) {
     const { addToCart, removeFromCart, cart, clearCart, placeOrder } = useContext(CartContext);
-    console.log("cart is", cart);
-    //   const [cart,setCart] = useState([]);
-    // async function place_order_function(e) {
-    //     e.preventDefault();
-    //     try {
-    //         // console.log("the cart is", cart);
-    //         const res = await axios.post(`api/submit_order/${id}`, [...cart], {
-    //             headers: {
-    //                 token: ac_token
-    //             }
-    //         });
-    //     } catch (error) {
-    //         console.log("some error", error);
-    //     }
-    //     store.dispatch(placeOrder());
-    //     navigate('/');
-    // }
+
     let total_amount = 0;
     return (
         <div className='p-10  flex flex-col justify-center ' >
@@ -59,7 +43,6 @@ function Cart({ }: Props) {
                             <TableCell>{item.quantity}</TableCell>
                             <TableCell
                             >
-
                                 <Button
                                     className='mr-5'
                                     onClick={() => addToCart(item.product)}

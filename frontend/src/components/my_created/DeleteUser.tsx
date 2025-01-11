@@ -79,7 +79,7 @@ function DeleteUser({ id }: Props) {
             <AlertDialogTrigger><Button
                 className=" rounded-sm"
 
-            >Delete Product</Button></AlertDialogTrigger>
+            >Delete Profile</Button></AlertDialogTrigger>
             <AlertDialogContent className=" sm:rounded-none " >
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>

@@ -38,7 +38,7 @@ type Props = {}
 function IndividualProduct({ }: Props) {
     const queryClient = useQueryClient();
     const fileInput = useRef<HTMLInputElement>(null);
-    const { id } = useParams();
+    const { id } = useParams();    
     const ac_token = localStorage.getItem('accessToken');
     const { toast } = useToast();
     const updateProduct = async (product: any) => {
